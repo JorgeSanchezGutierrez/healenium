@@ -15,11 +15,11 @@ gloMinutosAtrasDesdeMsg = "- Minutos atrás Desde para revisar cambios: " + str(
 gloMinutosAtrasDesdeMsg = gloMinutosAtrasDesdeMsg + " (Mayor a 0 = Minutos Desde, 0=No se filtra por Fecha)."
 
 # Para conexion a la Base de Datos
-gloHost = "localhost"  # Ej. "localhost" si está en tu máquina local -> IP del servidor
+gloHost = "192.168.40.17"  # Ej. "localhost" si está en tu máquina local -> IP del servidor
 gloDatabase = "healenium"
 gloUser = "healenium_user"
 gloPassword = "YDk2nmNs4s9aCP6K"
 #datos Data base 
 
 # Ruta origen de Docker-compose
-gloRutaCompose = "C:/zHealenium/healenium-2.0.0/healenium-2.0.0"
+gloRutaCompose = "/healenium"

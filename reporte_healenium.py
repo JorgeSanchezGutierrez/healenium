@@ -56,11 +56,12 @@ def fecha_hora():
 
 
 granURL = ""
-
-
+granContador = 0
+granContadorProgress = 0
 def procesar_jason(xjson1):
     global granURL
-
+    global granContador
+    global granContadorProgress
     xsalida = ""
 
     # JSON proporcionado
@@ -82,8 +83,15 @@ def procesar_jason(xjson1):
         xsalida = xsalida + "\n"
         if i > 0:
             xsalida = xsalida + "\n"
+	
+        granContador = granContador + 1
 
-        xsalida = xsalida + f"      Cambio #{i + 1}:" + "<br>"
+        buscar = "progressbar"
+
+        if buscar in failed_locator['value']:
+           granContadorProgress += 1
+
+        xsalida = xsalida + f"      <br><br>Cambio #{i + 1}:" + "<br>"
         xsalida = xsalida + f"      - Healing Result ID: {healing_result_id}" + "<br>"
         xsalida = xsalida + f"      - Class Name: {class_name}" + "<br>"
         xsalida = xsalida + f"      - Method Name: {method_name}" + "<br>"
@@ -95,7 +103,7 @@ def procesar_jason(xjson1):
         granURL = screenshot_path
         url = f"file:///{file_path.replace(' ', '%20')}"  # Formato de URL para la ruta de archivo
         xsalida = xsalida + f"      - Path de la imagen con cambios (Ver elemento con marco en ROJO):<br>      {url}"
-
+	
     return xsalida
 
 
@@ -121,13 +129,13 @@ def enviar_correo(contenido_html1, imagenes_rutas1):
     message.attach(msg_html)
 
     # Agregar las imágenes con el identificador cid correspondiente
-    for i, img_ruta in enumerate(imagenes_rutas1):
-        if img_ruta != "***":
-            with open(img_ruta, 'rb') as img_file:
-                img = MIMEImage(img_file.read())
-                img.add_header('Content-ID', f'<imagen{i}>')  # 'cid' que referencia la imagen en el HTML
-                img.add_header('Content-Disposition', 'inline', filename=img_ruta)
-                message.attach(img)
+   # for i, img_ruta in enumerate(imagenes_rutas1):
+   #     if img_ruta != "***":
+   #         with open(img_ruta, 'rb') as img_file:
+   #             img = MIMEImage(img_file.read())
+   #             img.add_header('Content-ID', f'<imagen{i}>')  # 'cid' que referencia la imagen en el HTML
+   #             img.add_header('Content-Disposition', 'inline', filename=img_ruta)
+   #             message.attach(img)
 
     # Envía el correo usando el servidor SMTP de Gmail
     try:
@@ -200,9 +208,9 @@ for fila in resultados:
 
         contenido_html += f"<p>{texto1}</p>"
         # Agregar la imagen justo debajo del texto
-        i = contador2 - 1
-        if i < len(imagenes):  # Asegura que no exceda la cantidad de imágenes
-            contenido_html += f'<br><img src="cid:imagen{i}" alt="*********************************************"><br>'
+       # i = contador2 - 1
+       # if i < len(imagenes):  # Asegura que no exceda la cantidad de imágenes
+       #     contenido_html += f'<br><img src="cid:imagen{i}" alt="*********************************************"><br>'
 
 contenido_html += "</body></html>"
 
@@ -232,6 +240,8 @@ else:
 print("")
 print(f"Total de registros leidos . . . : {contador1}")
 print(f"Total de registros seleccionados: {contador2}")
+print(f"Total de cambios realizados: {granContador}")
+print(f"Total de cambios progress: {granContadorProgress}")
 
 # FIN
 
