@@ -12,6 +12,8 @@ import reporte_healenium_param
 print("")
 print("Espere por favor...")
 
+gloLocalizadores = ""
+
 # Obtener la fecha y hora actual
 fecha_hora_actual = datetime.now()
 minutos_a_restar = reporte_healenium_param.gloMinutosAtrasDesde
@@ -69,6 +71,7 @@ def procesar_jason(xjson1):
     global granURL
     global granContador
     global granContadorProgress
+    global gloLocalizadores
 
     xsalida = ""
 
@@ -97,6 +100,10 @@ def procesar_jason(xjson1):
         buscar = "progressbar"
         if buscar in failed_locator['value']:
            granContadorProgress += 1
+
+        # Para buscar luego los Localizadores repetidos
+        gloLocalizadores += f"Failed Locator Value: {failed_locator['value']}" + "<br>"
+        # Fin
 
         xsalida = xsalida + f"      <br><br>Cambio #{i + 1}:" + "<br>"
         xsalida = xsalida + f"      - Healing Result ID: {healing_result_id}" + "<br>"
@@ -136,7 +143,8 @@ def enviar_correo(contenido_html1, imagenes_rutas1):
     message["To"] = ', '.join(receiver_email)
 
     # Cuerpo del correo
-    eeuca = "<br><br>Este es un correo automatico, no responder por favor.<br><br>"
+    eeuca = "<br><br>Localizadores incluidos en este correo:<br><br>" + gloLocalizadores
+    eeuca = eeuca + "<br><br>Este es un correo automatico, no responder por favor.<br><br>"
     eeuca = eeuca + "Soporte Técnico<br>Gerencia de Servicios<br>TestGroup"
     contenido_html1 += eeuca
 
